@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — мини-аналитика (без библиотек)</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Dashboard</h1>
+          <p>Мини-аналитика: продажи, таски, финансы, привычки</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <span class="pill" id="rangePill">Диапазон: —</span>
+        <button class="btn ghost" id="btnReset" title="Сбросить фильтры (Alt+R)">
+          ↺ Сброс
+        </button>
+        <button class="btn" id="btnTheme" title="Сменить тему (Alt+T)">
+          🌗 Тема
+        </button>
+        <button class="btn primary" id="btnSeed" title="Пересоздать демо-данные">
+          ✨ Новые данные
+        </button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="filters">
+        <div class="field">
+          <label for="from">С даты</label>
+          <input id="from" type="date" />
+        </div>
+        <div class="field">
+          <label for="to">По дату</label>
+          <input id="to" type="date" />
+        </div>
+        <div class="field">
+          <label for="cat">Категория</label>
+          <select id="cat">
+            <option value="all">Все</option>
+            <option value="sales">Продажи</option>
+            <option value="tasks">Таски</option>
+            <option value="finance">Финансы</option>
+            <option value="habits">Привычки</option>
+          </select>
+        </div>
+        <div class="field" style="min-width:200px;">
+          <label for="q">Поиск</label>
+          <input id="q" type="text" placeholder="например: подписка, спорт…" />
+        </div>
+        <div class="field">
+          <label for="sort">Сортировка</label>
+          <select id="sort">
+            <option value="date_desc">Дата ↓</option>
+            <option value="date_asc">Дата ↑</option>
+            <option value="value_desc">Значение ↓</option>
+            <option value="value_asc">Значение ↑</option>
+          </select>
+        </div>
+        <div class="field selectSmall">
+          <label for="pageSize">На странице</label>
+          <select id="pageSize">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+      </div>
+      <div class="hint">
+        Горячие клавиши: <span class="kbd">Alt</span>+<span class="kbd">T</span> тема, <span class="kbd">Alt</span>+<span class="kbd">R</span> сброс.
+      </div>
+    </div>
+
+    <div class="grid cards" id="kpiGrid"></div>
+
+    <div class="grid main" style="margin-top:14px;">
+      <div class="card">
+        <div class="split">
+          <h3>Графики</h3>
+          <div class="meta" id="chartMeta">—</div>
+        </div>
+        <div class="charts">
+          <div class="chartWrap">
+            <div class="chartTitle">
+              <strong>Динамика</strong>
+              <span>по дням (линия)</span>
+            </div>
+            <canvas id="lineChart" width="900" height="220" aria-label="Линейный график" role="img"></canvas>
+          </div>
+          <div class="chartWrap">
+            <div class="chartTitle">
+              <strong>Итоги по категориям</strong>
+              <span>столбики</span>
+            </div>
+            <canvas id="barChart" width="900" height="220" aria-label="Столбчатый график" role="img"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="split">
+          <h3>События</h3>
+          <div class="meta" id="tableMeta">—</div>
+        </div>
+        <div class="tableWrap">
+          <div id="emptyState" class="empty" style="display:none;">
+            <div aria-hidden="true">🫥</div>
+            <div>
+              <div><strong>Пусто.</strong> Фильтры слишком суровые.</div>
+              <div style="margin-top:6px;">
+                <button class="btn" id="btnEmptyReset">Сбросить фильтры</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="tableSkeleton" style="display:none;">
+            <div class="skeleton skeletonText" style="width: 45%; margin: 10px 0 12px;"></div>
+            <div class="skeleton" style="height: 260px; border-radius:14px;"></div>
+          </div>
+
+          <div id="tableReal">
+            <table aria-label="Таблица событий">
+              <thead>
+                <tr>
+                  <th style="width: 96px;">Дата</th>
+                  <th style="width: 120px;">Категория</th>
+                  <th>Описание</th>
+                  <th style="width: 110px; text-align:right;">Значение</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+
+            <div class="tfoot">
+              <div class="muted" id="countLabel">—</div>
+              <div class="pager">
+                <button class="btn" id="prev">←</button>
+                <span class="pill" id="pageLabel">—</span>
+                <button class="btn" id="next">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div aria-hidden="true">✅</div>
+    <div>
+      <p class="tTitle" id="toastTitle">Сохранено</p>
+      <p class="tBody" id="toastBody">Настройки записаны в localStorage.</p>
+    </div>
+  </div>
+</body>
+</html>
