@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini-Figma — упрощённый редактор (без библиотек)</title>
+  <link rel="stylesheet" href="mini_figma.css" />
+  <script src="mini_figma.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Mini-Figma</h1>
+          <p>блоки, перетаскивание, ресайз, снапы, история</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelTitle">Инструменты</div>
+        <div class="toolRow">
+          <button class="btn primary" id="addRect" title="Добавить прямоугольник (R)">▭ Прямоугольник</button>
+          <button class="btn primary" id="addText" title="Добавить текст (T)">T Текст</button>
+        </div>
+        <div class="toolRow">
+          <div class="hint">Или просто перетащи:</div>
+          <div class="draggables">
+            <div class="dragCard" draggable="true" data-drag="rect">▭ Rect</div>
+            <div class="dragCard" draggable="true" data-drag="text">T Text</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelTitle">Снап и сетка</div>
+        <div class="row">
+          <label class="switch">
+            <input type="checkbox" id="snap" />
+            <span class="slider"></span>
+          </label>
+          <div>
+            <div class="rowTitle">Snap to grid</div>
+            <div class="rowHint">при движении и ресайзе</div>
+          </div>
+        </div>
+        <div class="row" style="align-items:center;">
+          <div style="flex:1;">
+            <div class="rowTitle">Шаг сетки</div>
+            <div class="rowHint">px</div>
+          </div>
+          <input id="grid" type="number" min="4" max="64" step="1" value="10" class="num" />
+        </div>
+        <div class="row" style="align-items:center;">
+          <div style="flex:1;">
+            <div class="rowTitle">Гайды</div>
+            <div class="rowHint">снап к краям/центрам</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="guides" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelTitle">История</div>
+        <div class="toolRow">
+          <button class="btn" id="undo" title="Undo (Ctrl+Z)">↶ Undo</button>
+          <button class="btn" id="redo" title="Redo (Ctrl+Y)">↷ Redo</button>
+        </div>
+        <div class="toolRow">
+          <button class="btn" id="dup" title="Дублировать (Ctrl+D)">⧉ Duplicate</button>
+          <button class="btn danger" id="del" title="Удалить (Del)">🗑 Delete</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelTitle">Экспорт</div>
+        <button class="btn" id="export">⤓ Export JSON</button>
+        <button class="btn ghost" id="clear">✕ Очистить</button>
+      </div>
+
+      <div class="panel">
+        <div class="panelTitle">Свойства</div>
+        <div id="propsEmpty" class="empty">
+          <div>Выбери элемент.</div>
+          <div class="tiny">Двойной клик по тексту: редактировать.</div>
+        </div>
+
+        <div id="props" class="props" hidden>
+          <div class="propGrid">
+            <label class="prop">
+              <span>X</span>
+              <input type="number" id="px" class="num" />
+            </label>
+            <label class="prop">
+              <span>Y</span>
+              <input type="number" id="py" class="num" />
+            </label>
+            <label class="prop">
+              <span>W</span>
+              <input type="number" id="pw" class="num" />
+            </label>
+            <label class="prop">
+              <span>H</span>
+              <input type="number" id="ph" class="num" />
+            </label>
+          </div>
+          <div class="propGrid" style="margin-top:10px;">
+            <label class="prop" style="grid-column:1 / -1;">
+              <span>Цвет</span>
+              <input type="color" id="pfill" class="color" />
+            </label>
+            <label class="prop" style="grid-column:1 / -1;">
+              <span>Текст</span>
+              <input type="text" id="ptext" class="text" placeholder="(только для текстовых)" />
+            </label>
+          </div>
+          <div class="tiny" id="propsMeta"></div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="kbdLine">
+          <span class="kbd">R</span> rect
+          <span class="kbd">T</span> text
+          <span class="kbd">Ctrl</span>+<span class="kbd">Z</span> undo
+          <span class="kbd">Del</span> delete
+        </div>
+        <div class="tiny">Без библиотек. Да, руками. Да, больно.</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top">
+        <div class="crumbs">
+          <span class="chip">Документ</span>
+          <span class="muted" id="docMeta">—</span>
+        </div>
+        <div class="right">
+          <div class="chip" id="zoomLabel">100%</div>
+          <input id="zoom" type="range" min="50" max="200" value="100" />
+          <button class="btn" id="theme" title="Тема">🌗</button>
+        </div>
+      </header>
+
+      <section class="canvasWrap">
+        <div class="canvas" id="canvas" tabindex="0" aria-label="Полотно">
+          <div class="guide guideX" id="guideX" hidden></div>
+          <div class="guide guideY" id="guideY" hidden></div>
+          <!-- items will be injected here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Export modal -->
+  <div class="modal" id="modal" hidden>
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Экспорт JSON">
+      <div class="modalTop">
+        <div>
+          <div class="modalTitle">Export JSON</div>
+          <div class="tiny">Скопируй и не потеряй. Люди любят терять данные.</div>
+        </div>
+        <button class="btn ghost" id="closeModal">✕</button>
+      </div>
+      <textarea id="exportBox" spellcheck="false"></textarea>
+      <div class="modalBottom">
+        <button class="btn" id="copy">📋 Copy</button>
+        <button class="btn primary" id="saveFile">💾 Save .json</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <div class="toastIcon" aria-hidden="true">✅</div>
+    <div>
+      <div class="toastTitle" id="toastTitle">OK</div>
+      <div class="toastBody" id="toastBody">…</div>
+    </div>
+  </div>
+</body>
+</html>
