@@ -1,0 +1,528 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UI Kit (pure CSS) — storybook-light</title>
+  <link rel="stylesheet" href="./ui-kit.css" />
+  <script src="./ui-kit.js" defer></script>
+</head>
+
+<body>
+  <a class="ui-skip" href="#content">Перейти к контенту</a>
+
+  <div class="docs">
+    <aside class="docs__sidebar" aria-label="Навигация">
+      <div class="docs__brand">
+        <div class="docs__logo" aria-hidden="true"></div>
+        <div>
+          <div class="docs__title">UI Kit</div>
+          <div class="docs__subtitle">pure CSS • BEM • a11y</div>
+        </div>
+      </div>
+
+      <nav class="docs__nav">
+        <a class="docs__navLink" href="#intro">Введение</a>
+        <a class="docs__navLink" href="#tokens">Tokens</a>
+        <a class="docs__navLink" href="#buttons">Buttons</a>
+        <a class="docs__navLink" href="#inputs">Inputs</a>
+        <a class="docs__navLink" href="#dropdown">Dropdown</a>
+        <a class="docs__navLink" href="#tabs">Tabs</a>
+        <a class="docs__navLink" href="#modal">Modal</a>
+        <a class="docs__navLink" href="#toast">Toast</a>
+        <a class="docs__navLink" href="#tooltip">Tooltip</a>
+      </nav>
+
+      <div class="docs__sidebarFooter">
+        <button class="ui-btn ui-btn--ghost ui-btn--sm" data-theme-toggle type="button">
+          🌗 Тема
+        </button>
+        <div class="ui-muted ui-text-xs">
+          Focus: <span class="ui-kbd">Tab</span>, modal: <span class="ui-kbd">Esc</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="docs__main" id="content">
+      <header class="docs__topbar">
+        <div class="docs__topbarLeft">
+          <span class="ui-badge ui-badge--soft">storybook-light</span>
+          <span class="ui-muted ui-text-sm">без библиотек, без слёз (почти)</span>
+        </div>
+
+        <div class="docs__topbarRight">
+          <button class="ui-btn ui-btn--secondary ui-btn--sm" id="btnDemoToast" type="button">
+            Показать toast
+          </button>
+          <button class="ui-btn ui-btn--primary ui-btn--sm" data-modal-open="#demoModal" type="button">
+            Открыть modal
+          </button>
+        </div>
+      </header>
+
+      <!-- INTRO -->
+      <section class="docs__section" id="intro">
+        <h1 class="docs__h1">UI kit на чистом CSS</h1>
+        <p class="ui-text-md ui-muted">
+          Компоненты: кнопки, инпуты, модалки, dropdown, tabs, toast, tooltip.
+          CSS-переменные как токены. BEM для компонентов + небольшие utility.
+        </p>
+
+        <div class="ui-callout">
+          <div class="ui-callout__title">Доступность</div>
+          <div class="ui-callout__body">
+            Везде есть <b>focus ring</b>, aria-атрибуты, и нормальное поведение по клавиатуре.
+          </div>
+        </div>
+      </section>
+
+      <!-- TOKENS -->
+      <section class="docs__section" id="tokens">
+        <div class="docs__head">
+          <h2 class="docs__h2">Tokens (CSS variables)</h2>
+          <span class="ui-badge">:root</span>
+        </div>
+
+        <div class="docs__grid">
+          <div class="ui-card">
+            <div class="ui-card__head">
+              <h3 class="ui-card__title">Палитра</h3>
+              <span class="ui-badge ui-badge--soft">живёт в переменных</span>
+            </div>
+            <div class="ui-card__body">
+              <div class="swatches">
+                <div class="swatch"><span class="swatch__dot swatch__dot--primary"></span> primary</div>
+                <div class="swatch"><span class="swatch__dot swatch__dot--success"></span> success</div>
+                <div class="swatch"><span class="swatch__dot swatch__dot--danger"></span> danger</div>
+                <div class="swatch"><span class="swatch__dot swatch__dot--warn"></span> warning</div>
+                <div class="swatch"><span class="swatch__dot swatch__dot--bg"></span> bg</div>
+                <div class="swatch"><span class="swatch__dot swatch__dot--panel"></span> panel</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-card">
+            <div class="ui-card__head">
+              <h3 class="ui-card__title">Utility подход</h3>
+              <span class="ui-badge ui-badge--soft">минимальный</span>
+            </div>
+            <div class="ui-card__body">
+              <div class="ui-stack u-gap-2">
+                <div class="ui-muted ui-text-sm">
+                  <code class="ui-code">.u-stack</code>, <code class="ui-code">.u-row</code>,
+                  <code class="ui-code">.u-gap-*</code>, <code class="ui-code">.u-wrap</code>
+                </div>
+                <div class="u-row u-gap-2 u-wrap">
+                  <span class="ui-badge">badge</span>
+                  <span class="ui-badge ui-badge--soft">soft</span>
+                  <span class="ui-badge ui-badge--outline">outline</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs__code">
+          <div class="docs__codeTop">
+            <span class="ui-muted ui-text-sm">Токены и тема через data-theme</span>
+            <button class="ui-btn ui-btn--ghost ui-btn--xs" data-copy="#codeTokens" type="button">Copy</button>
+          </div>
+          <pre class="docs__pre"><code id="codeTokens">:root{
+  --bg: #0b0c10;
+  --panel: #12141b;
+  --text: #e9edf5;
+  --muted: #9aa4b2;
+
+  --primary: #7c5cff;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  --radius: 14px;
+  --ring: 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+[data-theme="light"]{
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- BUTTONS -->
+      <section class="docs__section" id="buttons">
+        <div class="docs__head">
+          <h2 class="docs__h2">Buttons</h2>
+          <span class="ui-badge ui-badge--outline">.ui-btn</span>
+        </div>
+
+        <div class="docs__grid">
+          <div class="ui-card">
+            <div class="ui-card__head">
+              <h3 class="ui-card__title">Варианты</h3>
+              <span class="ui-muted ui-text-sm">hover/focus/disabled</span>
+            </div>
+            <div class="ui-card__body">
+              <div class="u-row u-gap-2 u-wrap">
+                <button class="ui-btn ui-btn--primary" type="button">Primary</button>
+                <button class="ui-btn ui-btn--secondary" type="button">Secondary</button>
+                <button class="ui-btn ui-btn--ghost" type="button">Ghost</button>
+                <button class="ui-btn ui-btn--danger" type="button">Danger</button>
+                <button class="ui-btn" type="button" disabled>Disabled</button>
+              </div>
+
+              <div class="u-row u-gap-2 u-wrap u-mt-3">
+                <button class="ui-btn ui-btn--primary ui-btn--sm" type="button">Small</button>
+                <button class="ui-btn ui-btn--primary" type="button">Default</button>
+                <button class="ui-btn ui-btn--primary ui-btn--lg" type="button">Large</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-card">
+            <div class="ui-card__head">
+              <h3 class="ui-card__title">Loading</h3>
+              <span class="ui-muted ui-text-sm">aria-busy</span>
+            </div>
+            <div class="ui-card__body">
+              <div class="u-row u-gap-2 u-wrap">
+                <button class="ui-btn ui-btn--primary" data-loading="true" aria-busy="true" type="button">
+                  Сохранение
+                </button>
+                <button class="ui-btn ui-btn--secondary" id="btnFakeLoad" type="button">
+                  Запустить fake load
+                </button>
+              </div>
+              <p class="ui-muted ui-text-sm u-mt-2">
+                Loading делается через <code class="ui-code">[data-loading="true"]</code> + псевдо-спиннер.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs__code">
+          <div class="docs__codeTop">
+            <span class="ui-muted ui-text-sm">Пример кнопок</span>
+            <button class="ui-btn ui-btn--ghost ui-btn--xs" data-copy="#codeButtons" type="button">Copy</button>
+          </div>
+          <pre class="docs__pre"><code id="codeButtons">&lt;button class=&quot;ui-btn ui-btn--primary&quot;&gt;Primary&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn--secondary ui-btn--sm&quot;&gt;Small&lt;/button&gt;
+&lt;button class=&quot;ui-btn&quot; disabled&gt;Disabled&lt;/button&gt;
+
+&lt;button class=&quot;ui-btn ui-btn--primary&quot;
+        data-loading=&quot;true&quot; aria-busy=&quot;true&quot;&gt;
+  Сохранение
+&lt;/button&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- INPUTS -->
+      <section class="docs__section" id="inputs">
+        <div class="docs__head">
+          <h2 class="docs__h2">Inputs</h2>
+          <span class="ui-badge ui-badge--outline">.ui-field</span>
+        </div>
+
+        <div class="docs__grid">
+          <div class="ui-card">
+            <div class="ui-card__head">
+              <h3 class="ui-card__title">Текст, селект</h3>
+              <span class="ui-muted ui-text-sm">label + hint</span>
+            </div>
+            <div class="ui-card__body">
+              <div class="ui-stack u-gap-3">
+                <div class="ui-field">
+                  <label class="ui-field__label" for="email">Email</label>
+                  <input class="ui-input" id="email" type="email" placeholder="name@example.com"
+                         aria-describedby="emailHint" />
+                  <div class="ui-field__hint" id="emailHint">Мы не будем слать спам. Это слишком много работы.</div>
+                </div>
+
+                <div class="ui-field">
+                  <label class="ui-field__label" for="plan">План</label>
+                  <select class="ui-select" id="plan">
+                    <option>Free</option>
+                    <option>Pro</option>
+                    <option>Enterprise (для тех, кто любит боль)</option>
+                  </select>
+                </div>
+
+                <div class="ui-field ui-field--error">
+                  <label class="ui-field__label" for="name">Имя</label>
+                  <input class="ui-input" id="name" type="text" value="Cheburei"
+                         aria-invalid="true" aria-describedby="nameErr" />
+                  <div class="ui-field__error" id="nameErr">Ошибка: имя слишком хорошее для интернета.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-card">
+            <div class="ui-card__head">
+              <h3 class="ui-card__title">Checkbox / Switch</h3>
+              <span class="ui-muted ui-text-sm">a11y-friendly</span>
+            </div>
+            <div class="ui-card__body">
+              <div class="ui-stack u-gap-3">
+                <label class="ui-check">
+                  <input class="ui-check__input" type="checkbox" checked />
+                  <span class="ui-check__box" aria-hidden="true"></span>
+                  <span class="ui-check__label">Подписаться на обновления</span>
+                </label>
+
+                <label class="ui-switch">
+                  <input class="ui-switch__input" type="checkbox" checked />
+                  <span class="ui-switch__track" aria-hidden="true"></span>
+                  <span class="ui-switch__label">Включить режим “я всё контролирую”</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DROPDOWN -->
+      <section class="docs__section" id="dropdown">
+        <div class="docs__head">
+          <h2 class="docs__h2">Dropdown</h2>
+          <span class="ui-badge ui-badge--outline">.ui-dropdown</span>
+        </div>
+
+        <div class="ui-card">
+          <div class="ui-card__head">
+            <h3 class="ui-card__title">Меню</h3>
+            <span class="ui-muted ui-text-sm">click/esc/outside + arrows</span>
+          </div>
+          <div class="ui-card__body">
+            <div class="u-row u-gap-2 u-wrap">
+              <div class="ui-dropdown">
+                <button class="ui-btn ui-btn--secondary ui-dropdown__btn"
+                        type="button"
+                        aria-haspopup="menu"
+                        aria-expanded="false"
+                        aria-controls="menu1"
+                        data-dropdown-button>
+                  Меню ▾
+                </button>
+
+                <div class="ui-dropdown__menu"
+                     id="menu1"
+                     role="menu"
+                     aria-label="Действия"
+                     data-dropdown-menu
+                     hidden>
+                  <button class="ui-dropdown__item" role="menuitem" type="button">Профиль</button>
+                  <button class="ui-dropdown__item" role="menuitem" type="button">Настройки</button>
+                  <div class="ui-dropdown__sep" role="separator" aria-hidden="true"></div>
+                  <button class="ui-dropdown__item ui-dropdown__item--danger" role="menuitem" type="button">
+                    Выйти
+                  </button>
+                </div>
+              </div>
+
+              <div class="ui-dropdown">
+                <button class="ui-btn ui-btn--ghost ui-dropdown__btn"
+                        type="button"
+                        aria-haspopup="menu"
+                        aria-expanded="false"
+                        aria-controls="menu2"
+                        data-dropdown-button>
+                  Ещё ▾
+                </button>
+                <div class="ui-dropdown__menu"
+                     id="menu2"
+                     role="menu"
+                     aria-label="Ещё"
+                     data-dropdown-menu
+                     hidden>
+                  <button class="ui-dropdown__item" role="menuitem" type="button" data-toast="success">Toast success</button>
+                  <button class="ui-dropdown__item" role="menuitem" type="button" data-toast="danger">Toast danger</button>
+                  <button class="ui-dropdown__item" role="menuitem" type="button" data-modal-open="#demoModal">Открыть modal</button>
+                </div>
+              </div>
+            </div>
+
+            <p class="ui-muted ui-text-sm u-mt-2">
+              Поддержка: <span class="ui-kbd">↓</span>/<span class="ui-kbd">↑</span>, <span class="ui-kbd">Esc</span>, клик вне.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TABS -->
+      <section class="docs__section" id="tabs">
+        <div class="docs__head">
+          <h2 class="docs__h2">Tabs</h2>
+          <span class="ui-badge ui-badge--outline">role=tablist</span>
+        </div>
+
+        <div class="ui-card">
+          <div class="ui-card__head">
+            <h3 class="ui-card__title">Пример</h3>
+            <span class="ui-muted ui-text-sm">arrows/home/end</span>
+          </div>
+          <div class="ui-card__body">
+            <div class="ui-tabs" data-tabs>
+              <div class="ui-tabs__list" role="tablist" aria-label="Пример вкладок">
+                <button class="ui-tabs__tab" role="tab" aria-selected="true" aria-controls="tabA" id="tabBtnA" tabindex="0">Обзор</button>
+                <button class="ui-tabs__tab" role="tab" aria-selected="false" aria-controls="tabB" id="tabBtnB" tabindex="-1">Детали</button>
+                <button class="ui-tabs__tab" role="tab" aria-selected="false" aria-controls="tabC" id="tabBtnC" tabindex="-1">Логи</button>
+              </div>
+
+              <div class="ui-tabs__panel" role="tabpanel" id="tabA" aria-labelledby="tabBtnA">
+                <p class="ui-text-sm ui-muted">Тут мог быть график, но ты же просил UI kit.</p>
+                <div class="u-row u-gap-2 u-wrap">
+                  <span class="ui-badge">v1</span>
+                  <span class="ui-badge ui-badge--soft">stable-ish</span>
+                  <span class="ui-badge ui-badge--outline">a11y</span>
+                </div>
+              </div>
+
+              <div class="ui-tabs__panel" role="tabpanel" id="tabB" aria-labelledby="tabBtnB" hidden>
+                <div class="ui-callout ui-callout--soft">
+                  <div class="ui-callout__title">Детали</div>
+                  <div class="ui-callout__body">Табы работают по клавиатуре, потому что это не 2003 год.</div>
+                </div>
+              </div>
+
+              <div class="ui-tabs__panel" role="tabpanel" id="tabC" aria-labelledby="tabBtnC" hidden>
+                <pre class="ui-log">[12:00] init\n[12:01] click tab\n[12:02] human insisted on nice UX</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODAL -->
+      <section class="docs__section" id="modal">
+        <div class="docs__head">
+          <h2 class="docs__h2">Modal</h2>
+          <span class="ui-badge ui-badge--outline">focus trap</span>
+        </div>
+
+        <div class="ui-card">
+          <div class="ui-card__head">
+            <h3 class="ui-card__title">Открытие/закрытие</h3>
+            <span class="ui-muted ui-text-sm">Esc, overlay, buttons</span>
+          </div>
+          <div class="ui-card__body">
+            <div class="u-row u-gap-2 u-wrap">
+              <button class="ui-btn ui-btn--primary" data-modal-open="#demoModal" type="button">Открыть demo modal</button>
+              <button class="ui-btn ui-btn--ghost" data-modal-open="#confirmModal" type="button">Открыть confirm modal</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOAST -->
+      <section class="docs__section" id="toast">
+        <div class="docs__head">
+          <h2 class="docs__h2">Toast</h2>
+          <span class="ui-badge ui-badge--outline">aria-live</span>
+        </div>
+
+        <div class="ui-card">
+          <div class="ui-card__head">
+            <h3 class="ui-card__title">Типы</h3>
+            <span class="ui-muted ui-text-sm">success/warn/danger/info</span>
+          </div>
+          <div class="ui-card__body">
+            <div class="u-row u-gap-2 u-wrap">
+              <button class="ui-btn ui-btn--secondary" data-toast="info" type="button">Info</button>
+              <button class="ui-btn ui-btn--secondary" data-toast="success" type="button">Success</button>
+              <button class="ui-btn ui-btn--secondary" data-toast="warning" type="button">Warning</button>
+              <button class="ui-btn ui-btn--secondary" data-toast="danger" type="button">Danger</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLTIP -->
+      <section class="docs__section" id="tooltip">
+        <div class="docs__head">
+          <h2 class="docs__h2">Tooltip</h2>
+          <span class="ui-badge ui-badge--outline">CSS hover/focus</span>
+        </div>
+
+        <div class="ui-card">
+          <div class="ui-card__head">
+            <h3 class="ui-card__title">Пример</h3>
+            <span class="ui-muted ui-text-sm">aria-describedby</span>
+          </div>
+          <div class="ui-card__body">
+            <div class="u-row u-gap-3 u-wrap">
+              <span class="ui-tooltip">
+                <button class="ui-btn ui-btn--ghost" type="button" aria-describedby="tip1">
+                  Наведи/Tab
+                </button>
+                <span class="ui-tooltip__bubble" role="tooltip" id="tip1">
+                  Tooltip без JS. Мир иногда прекрасен.
+                </span>
+              </span>
+
+              <span class="ui-tooltip">
+                <span class="ui-badge ui-badge--soft" tabindex="0" aria-describedby="tip2">Фокусируемый badge</span>
+                <span class="ui-tooltip__bubble" role="tooltip" id="tip2">
+                  Можно фокусить, можно читать.
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <footer class="docs__footer">
+          <div class="ui-muted ui-text-sm">
+            Хочешь сделать “как настоящий Storybook” без React? Можно, но ты же любишь страдать.
+          </div>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+  <div class="ui-modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle" aria-describedby="demoModalDesc" hidden>
+    <div class="ui-modal__overlay" data-modal-close aria-hidden="true"></div>
+    <div class="ui-modal__dialog" role="document">
+      <div class="ui-modal__top">
+        <h3 class="ui-modal__title" id="demoModalTitle">Demo modal</h3>
+        <button class="ui-btn ui-btn--ghost ui-btn--xs" data-modal-close type="button" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="ui-modal__body" id="demoModalDesc">
+        <p class="ui-text-sm ui-muted">
+          Тут есть focus trap и закрытие по <span class="ui-kbd">Esc</span>. Да, это важно.
+        </p>
+        <div class="ui-field">
+          <label class="ui-field__label" for="modalInput">Пример поля</label>
+          <input class="ui-input" id="modalInput" placeholder="type something…" />
+        </div>
+      </div>
+      <div class="ui-modal__bottom">
+        <button class="ui-btn ui-btn--secondary" data-modal-close type="button">Отмена</button>
+        <button class="ui-btn ui-btn--primary" data-toast="success" data-modal-close type="button">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
+    <div class="ui-modal__overlay" data-modal-close aria-hidden="true"></div>
+    <div class="ui-modal__dialog" role="document">
+      <div class="ui-modal__top">
+        <h3 class="ui-modal__title" id="confirmTitle">Подтвердить действие</h3>
+        <button class="ui-btn ui-btn--ghost ui-btn--xs" data-modal-close type="button" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="ui-modal__body">
+        <p class="ui-text-sm ui-muted">Ты уверен? Люди часто не уверены, но кликают.</p>
+      </div>
+      <div class="ui-modal__bottom">
+        <button class="ui-btn" data-modal-close type="button">Нет</button>
+        <button class="ui-btn ui-btn--danger" data-toast="danger" data-modal-close type="button">Да, сделать</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST REGION -->
+  <div class="ui-toasts" aria-live="polite" aria-relevant="additions"></div>
+</body>
+</html>
